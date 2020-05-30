@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet'>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <style>
+        body{
+            margin: 0;
+            font-family: ABeeZee;
+        }
+        input{
+            margin-top: 5px;
+        }
+        .container{
+            top:50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+        }
+        .btn-success{
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            width: 100px;
+            height: 30px;
+        }
+        input{
+            width: 400px;
+            height: 40px;
+            border: 1px solid rgb(104, 101, 101);
+            border-radius: 10px;
+            font-size: 18px;
+            padding-left: 10px;
+        }
+        h3{
+            font-size: 40px;
+        }
+        #err{
+            color:rgb(216, 3, 3);
+        }
+    </style>
+    <body>
+        <center>
+            <div class="container">
+                <h3>Essentomart</h3>
+                <div id="err"></div>
+                    <input id="username" name="username" type="text" placeholder="Username" required/><br />
+                    <input id="password" name="password" type="password" placeholder="Password" required/><br />
+                    <button onclick="validateAndSend()" class="btn-success">Login</button><br />
+                    <div>Not a Member Yet? <a href="./register.html">SignUp</a></div>
+            </div>
+        </center>
+        <script>
+            function validateAndSend(){
+                let err = document.getElementById('err');
+                axios.post("http://localhost:4000/users/login", {
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('username').value
+                })
+                .then(res=>{
+                    if(res.data.statusType == "err"){
+                        err.innerHTML = res.data.status;
+                    }
+                    else{
+                        localStorage.setItem('jwt', res.data.jwt)
+                        window.location.href="./home.html";
+                    }
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            }
+        </script>
+    </body>
+</html>

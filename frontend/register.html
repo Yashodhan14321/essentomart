@@ -1,0 +1,99 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet'>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <style>
+        body{
+            margin: 0;
+            font-family: ABeeZee;
+        }
+        input{
+            margin-top: 5px;
+        }
+        .container{
+            top:50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+        }
+        .btn-success{
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            width: 100px;
+            height: 30px;
+        }
+        input{
+            width: 400px;
+            height: 40px;
+            border: 1px solid rgb(104, 101, 101);
+            border-radius: 10px;
+            font-size: 18px;
+            padding-left: 10px;
+        }
+        h3{
+            font-size: 40px;
+        }
+        #err{
+            color:rgb(216, 3, 3);
+        }
+    </style>
+    <body>
+        <center>
+            <div class="container">
+                <h3>Essentomart</h3>
+                <div id="err"></div>
+                    <input id="name" name="name" type="text" placeholder="Full Name" required/><br />
+                    <input id="username" name="username" type="text" placeholder="Username" required/><br />
+                    <input id="email" name="email" type="email" placeholder="Email" required/><br />
+                    <input id="phone" name="phone" type="text" placeholder="Phone" required/><br />
+                    <input id="password" name="password" type="password" placeholder="Password" required/><br />
+                    <input id="cpassword" name="cpassword" type="password" placeholder="Confirm Password" required/><br />
+                    <button onclick="validateAndSend()" class="btn-success">Register</button><br />
+                    <div>Already Registered? <a href="./login.html">Login</a></div>
+            </div>
+        </center>
+        <script>
+            function validateAndSend(){
+                let err = document.getElementById('err');
+                let pass = document.getElementById('password').value;
+                let cpass = document.getElementById('cpassword').value;
+                let phone = document.getElementById('phone').value;
+                if(pass.localeCompare(cpass)){
+                    err.innerHTML = "Password Didn't Match";
+                    return;
+                }
+                if(phone.length != 10){
+                    err.innerHTML = "invalid phone number";
+                    return;
+                }
+                axios.post("http://localhost:4000/users/register", {
+                    name: document.getElementById('name').value,
+                    username: document.getElementById('username').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('username').value,
+                    password: document.getElementById('username').value
+                })
+                .then(res=>{
+                    if(res.data.statusType == "err"){
+                        err.innerHTML = res.data.status;
+                    }
+                    else{
+                        window.location.href="./login.html";
+                    }
+                })
+                .catch(err=>{
+                    console.log(err)
+                })
+            }
+        </script>
+    </body>
+</html>
